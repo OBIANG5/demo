@@ -1,6 +1,6 @@
-const CACHE='obatrading-academy-public-v3-20261112';
+const CACHE='obatrading-academy-public-v4-20261112';
 const BASE=self.registration.scope;
-const CORE=['index.html','processus/index.html','cours/index.html','cas/index.html','assets/site.css','assets/site.js','assets/icon-192.png'].map(p=>new URL(p,BASE).href);
+const CORE=['index.html','processus/index.html','cours/index.html','cas/index.html','assets/site.css','assets/site.js','assets/studio.css','assets/studio.js','assets/icon-192.png'].map(p=>new URL(p,BASE).href);
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(names=>Promise.all(names.filter(n=>n.startsWith('obatrading-academy-public-')&&n!==CACHE).map(n=>caches.delete(n)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==location.origin||!u.href.startsWith(BASE))return;e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c)).catch(()=>{});}return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match(new URL('index.html',BASE).href))))});
